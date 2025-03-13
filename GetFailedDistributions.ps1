@@ -1,5 +1,5 @@
 $SiteCode = "PR0"
-#$failures = Get-WmiObject -Namespace root\sms\site_$SiteCode -Query "SELECT * FROM SMS_PackageStatusDistPointsSummarizer WHERE State <> 0" |
+Get-WmiObject -Namespace root\sms\site_$SiteCode -Query "SELECT * FROM SMS_PackageStatusDistPointsSummarizer WHERE State <> 0" |
     Select-Object ServerNALPath,LastCopied,PackageType,State,PackageID,SummaryDate |
         ForEach-Object {
             $PKG = Get-WmiObject -NameSpace root\sms\site_$SiteCode -Class SMS_Packagebaseclass -Filter "PackageID = '$($_.PackageID)'" | Select-Object Name,PackageSize
