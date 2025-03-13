@@ -1,11 +1,10 @@
 import-module ($Env:SMS_ADMIN_UI_PATH.Substring(0,$Env:SMS_ADMIN_UI_PATH.Length-5) + '\ConfigurationManager.psd1')
-CD PR0:
+Set-Location PR0:
 
 #Stores current date in various formats for use in Collection Names
 
 $yyyyMM = (get-date -f "yyyy-MM")
 $MM = (get-date -f "MM")
-$YY = (get-date -f "YY")
 $YYYY =(get-date -f "yyyy")
 $ShortMonth = (Get-Culture).DateTimeFormat.GetAbbreviatedMonthName($MM)
 
