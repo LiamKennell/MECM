@@ -1,10 +1,27 @@
+<#
+.SYNOPSIS
+  Script to create patching collections in MECM for monthly OS Updates
+
+.DESCRIPTION
+  Requires you to enter 3 digit site code of MECM. Script then works out when patch Tuesday is for the month when the script is 
+  being run and works out the dates for the collections based on this date.
+
+  Modifications will be required for specific use cases i.e. Limited Collection IDs and Collection Queries
+#>
+
+
 import-module ($Env:SMS_ADMIN_UI_PATH.Substring(0,$Env:SMS_ADMIN_UI_PATH.Length-5) + '\ConfigurationManager.psd1')
-Set-Location PR0:
+
+$MECMSiteCode = Read-Host "Enter MECM Site Code"
+$MECMSiteCode +=":"
+
+CD $MECMSiteCode
 
 #Stores current date in various formats for use in Collection Names
 
 $yyyyMM = (get-date -f "yyyy-MM")
 $MM = (get-date -f "MM")
+$YY = (get-date -f "YY")
 $YYYY =(get-date -f "yyyy")
 $ShortMonth = (Get-Culture).DateTimeFormat.GetAbbreviatedMonthName($MM)
 
@@ -31,13 +48,13 @@ $NonPrimCADcollection = New-CMDeviceCollection -Name "Windows 10 | $ShortMonth $
 
 #Step 3 - Moves new collections to folder created in step 1
 
-Move-CMObject -InputObject $Devcollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $Pilotcollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PMcollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PScollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PNcollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PrimCADcollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $NonPrimCADcollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $Devcollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $Pilotcollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PMcollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PScollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PNcollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PrimCADcollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $NonPrimCADcollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
 
 #Step 4 - Add Query Membership Rules
 
@@ -94,14 +111,14 @@ $PT2collection = New-CMDeviceCollection -Name "Windows 10 LTSC | $ShortMonth $YY
 
 #Step 3 (Tills) - Move newly created collections to the correct folder in SCCM
 
-Move-CMObject -InputObject $TillDevcollection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $TillPilot1collection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $TillPilot2collection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $TillPilot3collection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PT20collection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PT1collection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PT3collection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
-Move-CMObject -InputObject $PT2collection -FolderPath "PR0:\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $TillDevcollection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $TillPilot1collection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $TillPilot2collection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $TillPilot3collection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PT20collection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PT1collection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PT3collection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
+Move-CMObject -InputObject $PT2collection -FolderPath "$MECMSiteCode\DeviceCollection\Stores\Patching\Windows 10 - $yyyyMM $ShortMonth"
 
 
 #Step 4 (Tills) - Add Query Membership Rules
